@@ -18,7 +18,7 @@ import java.util.HashSet;
 
 
 public class MainActivity extends AppCompatActivity  {
-    private EditText etNestudiantes;
+    private EditText etNestudiantes,etNota1,etNota2,etNota3,etNota4;
 
     public Button btnIngresar;
 
@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity  {
     RadioGroup radioId30;
     double porcentajes[] = new double[4];
     private TextView tvPorcentajes [] = new TextView[4];
+    private double nota1,nota2,nota3,nota4,notafinal;
+    private TextView tvNotaFinal,tvMensaje, tvMensajeP;
     HashSet<Integer> idButtons = new HashSet<Integer>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,11 @@ public class MainActivity extends AppCompatActivity  {
         etNestudiantes=(EditText) findViewById(R.id.etNestudiantes);
         btnIngresar=(Button) findViewById(R.id. btnIngresar);
         radioId30 = (RadioGroup) findViewById(R.id.radioId30);
+        etNota1=(EditText) findViewById(R.id.etNota1);
+        etNota2=(EditText) findViewById(R.id.etNota2);
+        etNota3=(EditText) findViewById(R.id.etNota3);
+        etNota4=(EditText) findViewById(R.id.etNota4);
+        tvNotaFinal=(TextView) findViewById(R.id.tvNotaFinal);
     }
     public void porcentaje(View view){
         boolean checked = ((RadioButton) view).isChecked();
@@ -78,6 +85,46 @@ public class MainActivity extends AppCompatActivity  {
             Toast.makeText(this, "Ingresar la cantidad de estudiantes", Toast.LENGTH_LONG).show();
         }
     }
+    private void ConvertirNotas(){
+            nota1 = Double.parseDouble(etNota1.getText().toString());
+            nota2 = Double.parseDouble(etNota2.getText().toString());
+            nota3 = Double.parseDouble(etNota3.getText().toString());
+            nota4 = Double.parseDouble(etNota4.getText().toString());
 
+    }
+
+    private boolean esNotaValida(double nota){
+        if(nota>0 && nota <=5){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    private void limpiarNotas (){
+       etNota1.setText("");
+       etNota2.setText("");
+       etNota3.setText("");
+       etNota4.setText("");
+    }
+    public void CalcularNota(View view) {
+            boolean porcentajeValido = true;
+            for (int i = 0; i < porcentajes.length; i++) {
+                if (porcentajes[i] == 0) {
+                    porcentajeValido = false;
+                }
+            }
+            if (porcentajeValido  &&  numEstudiantes > 0 ) {
+                ConvertirNotas();
+            if (esNotaValida(nota1) && esNotaValida(nota2) && esNotaValida(nota3) && esNotaValida(nota4)) {
+                    nota1 = (nota1 * porcentajes[0]);
+                    nota2 = (nota2 * porcentajes[1]);
+                    nota3 = (nota3 * porcentajes[2]);
+                    nota4 = (nota4 * porcentajes[3]);
+
+                    notafinal = nota1 + nota2 + nota3 + nota4;
+
+                    tvNotaFinal.setText("Nota final: " + String.valueOf(notafinal));
+
+    }
 
 }
