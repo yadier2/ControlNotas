@@ -20,10 +20,11 @@ import java.util.HashSet;
 public class MainActivity extends AppCompatActivity  {
     private EditText etNestudiantes,etNota1,etNota2,etNota3,etNota4;
 
-    public Button btnIngresar;
+    public Button btnIngresar,btnCalcular;
 
     private int contador= 0;
     public int numEstudiantes;
+    private int nEstudiantesPerdieron=0;
     RadioGroup radioId30;
     double porcentajes[] = new double[4];
     private TextView tvPorcentajes [] = new TextView[4];
@@ -42,6 +43,14 @@ public class MainActivity extends AppCompatActivity  {
         etNota3=(EditText) findViewById(R.id.etNota3);
         etNota4=(EditText) findViewById(R.id.etNota4);
         tvNotaFinal=(TextView) findViewById(R.id.tvNotaFinal);
+
+        tvMensaje=(TextView) findViewById(R.id.tvMensaje);
+        tvMensajeP=(TextView) findViewById(R.id.tvMensajeP);
+        tvPorcentajes[0]=(TextView) findViewById(R.id.tvPorcentaje1);
+        tvPorcentajes[1]=(TextView) findViewById(R.id.tvPorcentaje2);
+        tvPorcentajes[2]=(TextView) findViewById(R.id.tvPorcentaje3);
+        tvPorcentajes[3]=(TextView) findViewById(R.id.tvPorcentaje4);
+        btnCalcular=(Button) findViewById(R.id.btnCalcular);
     }
     public void porcentaje(View view){
         boolean checked = ((RadioButton) view).isChecked();
@@ -108,6 +117,7 @@ public class MainActivity extends AppCompatActivity  {
     }
     public void CalcularNota(View view) {
             boolean porcentajeValido = true;
+        try {
             for (int i = 0; i < porcentajes.length; i++) {
                 if (porcentajes[i] == 0) {
                     porcentajeValido = false;
@@ -124,7 +134,36 @@ public class MainActivity extends AppCompatActivity  {
                     notafinal = nota1 + nota2 + nota3 + nota4;
 
                     tvNotaFinal.setText("Nota final: " + String.valueOf(notafinal));
+                if (notafinal < 3) {
+                    nEstudiantesPerdieron++;
 
+                }
+                limpiarNotas();
+                numEstudiantes--;
+                if(numEstudiantes == 0){
+                    tvMensajeP.setText("Cantidad de estudiantes que perdieron la materia: ");
+                    tvMensaje.setText(String.valueOf(nEstudiantesPerdieron));
+                    etNestudiantes.setText("0");
+                }else{
+                    tvMensajeP.setText("Aún falta ingresar las notas de "+numEstudiantes+ " estudiantes");
+                }
+            } else {
+                Toast.makeText(this, "Las notas deben estar comprendidas en el rango que va desde 1 hasta 5", Toast.LENGTH_LONG).show();
+            }
+            } else {
+                if(!porcentajeValido){
+                    Toast.makeText(this, " Es necesario elegir el porcentaje asignado a cada nota", Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(this, "La cantidad de estudiantes es cero", Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+    } catch (Exception e) {
+        Toast.makeText(this, "Error valores invalidos", Toast.LENGTH_LONG).show();
+
+    }
     }
 
 }
